@@ -64,7 +64,7 @@ const UserTable = () => {
     const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
-        <div className="bg-white rounded-lg shadow-lg px-4 py-6">
+        <div className="bg-white  rounded-lg shadow-lg px-4 py-6">
             {/* Invite Button */}
             <div className="flex justify-end mb-7">
                 <button

@@ -4,10 +4,20 @@ import { FiMenu } from "react-icons/fi";
 import { MdDashboard } from "react-icons/md";
 import { FaProjectDiagram, FaUser } from "react-icons/fa";
 import AdminNavbar from "../components/AdminNavbar";
+import { logoutAlert } from "../utility/alert/logoutAlert";
 
 const MainLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const { pathname } = useLocation();
+    const handleLogout  = async()=>{
+        const res = await logoutAlert();
+        if(res.isConfirmed){
+            localStorage.clear();
+            window.location.href = "/";
+        }
+    }
+
+
 
     return (
         <div className="flex h-screen bg-[#E9E9E9]">
@@ -132,7 +142,8 @@ const MainLayout = () => {
                 {/* Logout */}
                 <div className="absolute bottom-8 left-0 w-full px-6">
                     <button
-                        className="w-full py-2 rounded-full border border-gray-300 text-[#989898] hover:text-indigo-600 hover:border-text-indigo-600 transition"
+                    onClick={handleLogout}
+                        className="w-full cursor-pointer py-2 rounded-full border border-gray-300 text-[#989898] hover:text-indigo-600 hover:border-text-indigo-600 transition"
                     >
                         Logout
                     </button>
@@ -155,7 +166,7 @@ const MainLayout = () => {
 
             {/* Main Content */}
             <main
-                className={`flex-1 mt-24 p-6 transition-all duration-300
+                className={`flex-1 mt-24 p-6 transition-all duration-300 
         ${sidebarOpen ? "ml-87.5" : "ml-25"}`}
             >
                 <Outlet />

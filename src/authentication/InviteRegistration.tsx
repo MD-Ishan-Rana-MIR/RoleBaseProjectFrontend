@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { errorMessage } from "../utility/errorMessage";
 import { useInviteRegistrationMutation } from "../api/admin/inviteApi";
 import toast from "react-hot-toast";
@@ -16,6 +16,7 @@ type RegisterFormValues = {
 };
 
 const InviteRegistration = () => {
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
@@ -39,6 +40,7 @@ const InviteRegistration = () => {
             if (res) {
                 toast.success(res?.message);
                 reset(); // ✅ form reset correctly
+                navigate("/login")
             }
         } catch (error) {
             errorMessage(error);
