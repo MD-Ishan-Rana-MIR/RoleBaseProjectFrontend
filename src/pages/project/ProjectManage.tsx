@@ -1,8 +1,11 @@
 import React from 'react'
+import ProjectTable from './ProjectTable'
 
 const ProjectManage = () => {
   return (
-    <div>ProjectManage</div>
+    <div>
+      <ProjectTable />
+    </div>
   )
 }
 

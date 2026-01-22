@@ -2,6 +2,10 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
+import Spinner from "../../components/Spinner";
+import { useSendInviteMutation } from "../../api/admin/inviteApi";
+import { errorMessage } from "../../utility/errorMessage";
+import toast from "react-hot-toast";
 
 // Define form data type
 type InviteFormData = {
@@ -19,7 +23,7 @@ const InviteForm: React.FC<InviteFormProps> = ({ setInviteModal }) => {
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isSubmitting },
         reset
     } = useForm<InviteFormData>({
         defaultValues: {
@@ -27,11 +31,23 @@ const InviteForm: React.FC<InviteFormProps> = ({ setInviteModal }) => {
         },
     });
 
-    const onSubmit: SubmitHandler<InviteFormData> = (data) => {
-        console.log(data)
-        // onInvite(data); // pass data to parent or API
-        reset(); // clear form after submit
-        setInviteModal(false); // close modal
+    const [sendInvite] = useSendInviteMutation()
+
+    const onSubmit: SubmitHandler<InviteFormData> = async (data) => {
+
+        try {
+            const res = await sendInvite(data).unwrap();
+            if (res) {
+                toast.success(res?.message)
+                reset()
+                setInviteModal(false);
+            }
+        } catch (error) {
+            return errorMessage(error)
+        }
+
+
+
     };
 
     return (
@@ -89,7 +105,9 @@ const InviteForm: React.FC<InviteFormProps> = ({ setInviteModal }) => {
                         type="submit"
                         className="mt-4 cursor-pointer bg-indigo-500 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
-                        Invite
+                        {
+                            isSubmitting ? <Spinner /> : "Invite"
+                        }
                     </button>
                 </form>
             </div>

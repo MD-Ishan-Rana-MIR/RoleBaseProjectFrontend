@@ -2,6 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { errorMessage } from "../utility/errorMessage";
+import { useLoginMutation } from "../api/auth/authApi";
+import Spinner from './../components/Spinner';
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface LoginFormValues {
@@ -16,14 +20,28 @@ const Login = () => {
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<LoginFormValues>();
 
+    const [login] = useLoginMutation();
+
     const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-        localStorage.setItem("role", "admin")
-        console.log("Login Data:", data);
-        navigate("/dashboard")
-        // TODO: API call
+
+        try {
+            const res = await login(data).unwrap();
+            if (res) {
+                toast.success(res?.message);
+                localStorage.setItem("token", res?.data?.token);
+                localStorage.setItem("role", res?.data?.role);
+                reset();
+                navigate("/dashboard")
+            }
+            console.log(res?.data?.token)
+        } catch (error) {
+            return errorMessage(error)
+        }
+
     };
 
     return (
@@ -106,16 +124,11 @@ const Login = () => {
                         disabled={isSubmitting}
                         className=" cursor-pointer w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-60"
                     >
-                        {isSubmitting ? "Logging in..." : "Login"}
+                        {isSubmitting ? <Spinner /> : "Login"}
                     </button>
                 </form>
 
-                {/* <p className="text-center text-sm text-gray-600 mt-6">
-                    Don’t have an account?{" "}
-                    <span className="text-indigo-600 font-medium cursor-pointer">
-                        Sign up
-                    </span>
-                </p> */}
+
             </div>
         </div>
     );

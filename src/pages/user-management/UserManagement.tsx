@@ -4,6 +4,7 @@ import UserTable from './UserTable'
 const UserManagement = () => {
   return (
     <div>
+
       <UserTable />
     </div>
   )
