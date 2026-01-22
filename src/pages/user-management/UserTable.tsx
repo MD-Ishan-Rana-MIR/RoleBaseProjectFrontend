@@ -1,5 +1,7 @@
 // src/components/UserTable.tsx
 import { useState, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import InviteForm from "./InviteFrom";
 
 export type User = {
     id: number;
@@ -73,6 +75,14 @@ const UserTable = () => {
         setModalOpen(true);
     };
 
+    // open user invite modal 
+
+    const [inviteModal, setInviteModal] = useState<boolean>(false);
+
+    const openInviteModal = () => {
+        setInviteModal(!inviteModal)
+    }
+
     // clear button 
 
     const handleClear = () => {
@@ -82,8 +92,29 @@ const UserTable = () => {
 
     }
 
+
+    // user invite 
+
+    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+        defaultValues: {
+            role: "STAFF"
+        }
+    });
+
+    const onSubmit = (data: FormData) => {
+        console.log("Form Data:", data);
+        // You can send this data to API or state update
+    };
+
+
+
     return (
-        <div className="p-4 md:p-6 bg-white rounded-lg shadow-lg">
+        <div className=" bg-white rounded-lg shadow-lg px-4 py-6 ">
+            {/* invite button  */}
+            <div className=" flex justify-end mb-7 " >
+                <button onClick={openInviteModal} className="px-10 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold">Invite User</button>
+
+            </div>
             {/* Filters */}
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3 ">
                 <div className=" flex gap-x-6 w-full " >
@@ -263,6 +294,22 @@ const UserTable = () => {
                     </div>
                 </div>
             )}
+
+
+            {/* invite modal  */}
+
+
+            {/* Modal */}
+            {inviteModal && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-600/45 z-50 p-2">
+                    <InviteForm setInviteModal={setInviteModal} />
+                </div>
+            )}
+
+
+
+
+
         </div>
     );
 };
