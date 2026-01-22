@@ -1,0 +1,167 @@
+import { useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+import { FiMenu } from "react-icons/fi";
+import { MdDashboard } from "react-icons/md";
+import Navbar from "../components/Navbar";
+import { FaProjectDiagram, FaUser } from "react-icons/fa";
+
+const MainLayout = () => {
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const { pathname } = useLocation();
+
+    return (
+        <div className="flex h-screen bg-[#E9E9E9]">
+            {/* Sidebar */}
+            <aside
+                className={`fixed top-0 left-0 bottom-0 h-screen px-6
+        bg-white text-[#989898] border-r border-gray-300
+        transition-all duration-300
+        ${sidebarOpen ? "w-87.5" : "w-25"}`}
+            >
+                {/* Logo + Toggle */}
+                <div className="flex items-center justify-between mt-6 mb-10">
+                    {sidebarOpen && (
+                        <img
+                            src="/images/logo/logo.svg"
+                            alt="Logo"
+                            className="h-9"
+                        />
+                    )}
+
+                    <button
+                        onClick={() => setSidebarOpen(!sidebarOpen)}
+                        className="text-[#989898] hover:text-indigo-600 cursor-pointer "
+                    >
+                        <FiMenu size={26} />
+                    </button>
+                </div>
+
+                {/* Menu */}
+                <nav>
+                    <ul className="space-y-3 text-lg font-medium">
+                        <li>
+                            <NavLink
+                                to="/dashboard"
+                                className={`flex items-center gap-5 px-5 py-3 rounded-full transition    ${pathname === "/dashboard"
+                                    ? "bg-[#E9E9E9]"
+                                    : "hover:bg-gray-100"
+                                    }`}
+                            >
+                                <MdDashboard
+                                    size={25}
+                                    className={
+                                        pathname === "/dashboard"
+                                            ? "text-indigo-600"
+                                            : "text-[#989898]"
+                                    }
+                                />
+
+                                {sidebarOpen && (
+                                    <span
+                                        className={`text-base ${pathname === "/dashboard"
+                                            ? "text-indigo-600"
+                                            : "text-[#989898]"
+                                            }`}
+                                    >
+                                        Dashboard
+                                    </span>
+                                )}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/dashboard/user-management"
+                                className={`flex items-center gap-5 px-5 py-3 rounded-full transition    ${pathname === "/dashboard/user-management"
+                                    ? "bg-[#E9E9E9]"
+                                    : "hover:bg-gray-100"
+                                    }`}
+                            >
+                                <FaUser
+                                    size={25}
+                                    className={
+                                        pathname === "/dashboard/user-management"
+                                            ? "text-indigo-600"
+                                            : "text-[#989898]"
+                                    }
+                                />
+
+                                {sidebarOpen && (
+                                    <span
+                                        className={`text-base ${pathname === "/dashboard/user-management"
+                                            ? "text-indigo-600"
+                                            : "text-[#989898]"
+                                            }`}
+                                    >
+                                        User Management
+                                    </span>
+                                )}
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink
+                                to="/dashboard/project-management"
+                                className={`flex items-center gap-5 px-5 py-3 rounded-full transition    ${pathname === "/dashboard/project-management"
+                                    ? "bg-[#E9E9E9]"
+                                    : "hover:bg-gray-100"
+                                    }`}
+                            >
+                                <FaProjectDiagram
+                                    size={25}
+                                    className={
+                                        pathname === "/dashboard/project-management"
+                                            ? "text-indigo-600"
+                                            : "text-[#989898]"
+                                    }
+                                />
+
+                                {sidebarOpen && (
+                                    <span
+                                        className={`text-base ${pathname === "/dashboard/project-management"
+                                            ? "text-indigo-600"
+                                            : "text-[#989898]"
+                                            }`}
+                                    >
+                                        Project Management
+                                    </span>
+                                )}
+                            </NavLink>
+                        </li>
+                    </ul>
+                </nav>
+
+                {/* Logout */}
+                <div className="absolute bottom-8 left-0 w-full px-6">
+                    <button
+                        className="w-full py-2 rounded-full border border-gray-300 text-[#989898] hover:text-indigo-600 hover:border-text-indigo-600 transition"
+                    >
+                        Logout
+                    </button>
+                </div>
+            </aside>
+
+            {/* Header */}
+            <header
+                className={`fixed top-0 h-24 bg-white shadow z-20
+        flex items-center px-6 transition-all duration-300
+        ${sidebarOpen ? "ml-87.5" : "ml-25"}`}
+                style={{
+                    width: sidebarOpen
+                        ? "calc(100% - 350px)"
+                        : "calc(100% - 100px)",
+                }}
+            >
+                <Navbar />
+            </header>
+
+            {/* Main Content */}
+            <main
+                className={`flex-1 mt-24 p-6 transition-all duration-300
+        ${sidebarOpen ? "ml-87.5" : "ml-25"}`}
+            >
+                <Outlet />
+            </main>
+        </div>
+    );
+};
+
+export default MainLayout;
