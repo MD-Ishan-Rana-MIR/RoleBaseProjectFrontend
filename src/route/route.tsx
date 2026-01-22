@@ -3,6 +3,8 @@ import Login from "../authentication/LoginPage";
 import MainLayout from "../main-layout/MainLayout";
 import ProjectManage from "../pages/project/ProjectManage";
 import UserManagement from "../pages/user-management/UserManagement";
+import ProtectedRoute from "./ProtectedRoute";
+import InviteRegistration from "../authentication/InviteRegistration";
 
 export const router = createBrowserRouter([
     {
@@ -10,20 +12,24 @@ export const router = createBrowserRouter([
         element: <Login />
     },
     {
+        path: "/registraiton/accept-invite",
+        element: <InviteRegistration />
+    },
+    {
         path: "/dashboard",
         element: <MainLayout />,
         children: [
             {
                 path: "",
-                element: <div><h1>dashboard home page</h1></div>
+                element: <ProtectedRoute><div><h1>dashboard home page</h1></div></ProtectedRoute>
             },
             {
                 path: "user-management",
-                element: <UserManagement />
+                element: <ProtectedRoute><UserManagement /></ProtectedRoute>
             },
             {
                 path: "project-management",
-                element: <ProjectManage />
+                element: <ProtectedRoute><ProjectManage /></ProtectedRoute>
             }
         ]
     }

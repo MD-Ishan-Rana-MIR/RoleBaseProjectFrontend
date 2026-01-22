@@ -1,39 +1,64 @@
-import { useState } from "react";
+// src/pages/Register.tsx
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
+import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-interface LoginFormValues {
+type RegisterFormValues = {
+    name: string;
     email: string;
     password: string;
-}
+};
 
-const Login = () => {
-    const [showPassword, setShowPassword] = useState<boolean>(false);
-    const navigate = useNavigate();
+const InviteRegistration = () => {
+    const [showPassword, setShowPassword] = useState(false);
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const emailFromURL = searchParams.get("email") || ""; // Get email from query
+    console.log("email is", emailFromURL)
+    const tokenFromURL = searchParams.get("token") || ""; // Get token from query
+
+
 
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting },
-    } = useForm<LoginFormValues>();
+    } = useForm<RegisterFormValues>();
 
-    const onSubmit: SubmitHandler<LoginFormValues> = async (data) => {
-        localStorage.setItem("role", "admin")
-        console.log("Login Data:", data);
-        navigate("/dashboard")
-        // TODO: API call
+    const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
+        console.log("Register Data:", data);
+        // TODO: call your API to register
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+        <div className="min-h-screen flex items-center justify-center bg-[#E9E9E9] px-4">
             <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8">
                 <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">
-                    Login to your account
+                    Create your account
                 </h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                    {/* Name */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Name
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="Your Name"
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.name
+                                ? "border-red-500 focus:ring-red-400"
+                                : "border-gray-300 focus:ring-indigo-500"
+                                }`}
+                            {...register("name", { required: "Name is required" })}
+                        />
+                        {errors.name && (
+                            <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
+                        )}
+                    </div>
+
                     {/* Email */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -42,6 +67,8 @@ const Login = () => {
                         <input
                             type="email"
                             placeholder="you@example.com"
+                            disabled
+                            defaultValue={emailFromURL}
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.email
                                 ? "border-red-500 focus:ring-red-400"
                                 : "border-gray-300 focus:ring-indigo-500"
@@ -55,9 +82,7 @@ const Login = () => {
                             })}
                         />
                         {errors.email && (
-                            <p className="text-sm text-red-500 mt-1">
-                                {errors.email.message}
-                            </p>
+                            <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
                         )}
                     </div>
 
@@ -66,7 +91,6 @@ const Login = () => {
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                             Password
                         </label>
-
                         <div className="relative">
                             <input
                                 type={showPassword ? "text" : "password"}
@@ -83,16 +107,14 @@ const Login = () => {
                                     },
                                 })}
                             />
-
                             <button
                                 type="button"
-                                onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute inset-y-0 right-3 flex items-center text-sm text-gray-600 hover:text-indigo-600 cursor-pointer "
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute inset-y-0 right-3 flex items-center text-gray-600 hover:text-indigo-700"
                             >
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
                         </div>
-
                         {errors.password && (
                             <p className="text-sm text-red-500 mt-1">
                                 {errors.password.message}
@@ -104,22 +126,15 @@ const Login = () => {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className=" cursor-pointer w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-60"
+                        className="cursor-pointer w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-60"
                     >
-                        {isSubmitting ? "Logging in..." : "Login"}
+                        {isSubmitting ? "Registering..." : "Register"}
                     </button>
                 </form>
 
-                {/* <p className="text-center text-sm text-gray-600 mt-6">
-                    Don’t have an account?{" "}
-                    <span className="text-indigo-600 font-medium cursor-pointer">
-                        Sign up
-                    </span>
-                </p> */}
+                {/*  */}
             </div>
         </div>
     );
 }
-
-
-export default Login;
+export default InviteRegistration;
