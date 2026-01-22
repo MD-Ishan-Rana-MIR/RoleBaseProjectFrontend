@@ -1,5 +1,5 @@
 // src/components/ItemTable.tsx
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 

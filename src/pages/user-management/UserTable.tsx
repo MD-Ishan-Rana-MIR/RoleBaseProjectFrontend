@@ -1,6 +1,5 @@
 // src/components/UserTable.tsx
 import { useState, useMemo } from "react";
-import { useForm } from "react-hook-form";
 import InviteForm from "./InviteFrom";
 
 export type User = {
@@ -35,7 +34,7 @@ const statusColors = {
 };
 
 const UserTable = () => {
-    const [users, setUsers] = useState<User[]>(initialUsers);
+
 
     const [search, setSearch] = useState("");
     const [filterRole, setFilterRole] = useState<"" | "ADMIN" | "MANAGER" | "STAFF">("");
@@ -50,14 +49,14 @@ const UserTable = () => {
     const [newValue, setNewValue] = useState<string>("");
 
     const filteredUsers = useMemo(() => {
-        return users
+        return initialUsers
             .filter((u) =>
                 u.name.toLowerCase().includes(search.toLowerCase()) ||
                 u.email.toLowerCase().includes(search.toLowerCase())
             )
             .filter((u) => (filterRole ? u.role === filterRole : true))
             .filter((u) => (filterStatus ? u.status === filterStatus : true));
-    }, [users, search, filterRole, filterStatus]);
+    }, [initialUsers, search, filterRole, filterStatus]);
 
     const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
     const paginatedUsers = filteredUsers.slice(
@@ -93,18 +92,6 @@ const UserTable = () => {
     }
 
 
-    // user invite 
-
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-        defaultValues: {
-            role: "STAFF"
-        }
-    });
-
-    const onSubmit = (data: FormData) => {
-        console.log("Form Data:", data);
-        // You can send this data to API or state update
-    };
 
 
 
