@@ -10,6 +10,13 @@ export const inviteApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: data
             })
+        }),
+        inviteRegistration: builder.mutation({
+            query: (data) => ({
+                url: `/auth/register-via-invite`,
+                method : "POST",
+                body : data
+            })
         })
 
 
@@ -18,4 +25,4 @@ export const inviteApi = baseApi.injectEndpoints({
     }),
 })
 
-export const { useSendInviteMutation } = inviteApi
+export const { useSendInviteMutation, useInviteRegistrationMutation } = inviteApi

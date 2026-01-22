@@ -1,122 +1,112 @@
-
-// import { Bell } from 'lucide-react'
-// import { useLocation } from 'react-router-dom'
-// import { useProfileQuery } from '../../api/auth/authApi';
-// import { Spinner } from '../ui/spinner';
-
-import { useLocation } from "react-router-dom";
-import { Bell } from 'lucide-react';
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { FaBars } from "react-icons/fa";
 
 const Navbar = () => {
-    const location = useLocation();
-    const pathName = location.pathname;
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [profileOpen, setProfileOpen] = useState(false);
 
-    // const { data, isLoading } = useProfileQuery({});
-    // const profile: UserResponseType = data;
-    // console.log(profile.data.avatar)
+    const profileRef = useRef<HTMLDivElement | null>(null);
+
+    // Close profile dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (
+                profileRef.current &&
+                !profileRef.current.contains(e.target as Node)
+            ) {
+                setProfileOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
-        <div className=' flex items-center justify-between  w-full py-3 ' >
-            <div>
+        <nav className="bg-white shadow-sm px-4 py-3">
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
 
-                {
-                    pathName == "/dashboard" && <>
-                        <div>
-                            <h1 className=" text-textColor text-3xl font-medium  ">Dashboard Overview</h1>
-                            <p className=' text-textColor text-xl mt-1 ' >
-                                Welcome back! Here's what's happening with your NBC platform today.
-                            </p>
+                {/* Left: Logo */}
+                <div className="text-xl font-bold text-indigo-600">
+                    <Link to="/">MyLogo</Link>
+                </div>
 
-                        </div>
+                {/* Middle: Desktop Menu */}
+                <div className="hidden md:flex gap-6 text-gray-700 font-medium">
+                    <Link to="/" className="hover:text-indigo-600">Home</Link>
+                    <Link to="/projects" className="hover:text-indigo-600">Projects</Link>
+                </div>
 
+                {/* Right */}
+                <div className="flex items-center gap-4 relative" ref={profileRef}>
 
-                    </>
-                }
+                    {/* Mobile menu button */}
+                    <button
+                        className="md:hidden text-xl cursor-pointer "
+                        onClick={() => {
+                            setMenuOpen(!menuOpen);
+                            setProfileOpen(false);
+                        }}
+                    >
+                        <FaBars />
+                    </button>
 
+                    {/* Profile Image */}
+                    <img
+                        src="https://i.pravatar.cc/40"
+                        alt="profile"
+                        onClick={() => {
+                            setProfileOpen(!profileOpen);
+                            setMenuOpen(false);
+                        }}
+                        className="w-10 h-10 rounded-full cursor-pointer border"
+                    />
 
-                {
-                    pathName == "/dashboard/user-management" && <>
-                        <div>
-                            <h1 className=" text-textColor text-3xl font-medium  ">User Management</h1>
-                            <p className=' text-textColor text-xl mt-1 ' >
-                                Manage and monitor all Users
-                            </p>
-
-                        </div>
-
-
-                    </>
-                }
-                {
-                    pathName == "/dashboard/project-management" && <>
-                        <div>
-                            <h1 className=" text-textColor text-3xl font-medium  ">Project Management</h1>
-                            <p className=' text-textColor text-xl mt-1 ' >
-                                Manage and monitor all project.
-                            </p>
-
-                        </div>
-
-
-                    </>
-                }
-
-
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    {/* Profile Dropdown */}
+                    <div
+                        className={`absolute right-0 top-14 w-40 bg-white  rounded-md shadow-lg z-50 transition-all duration-200 ease-out origin-top ${profileOpen
+                            ? "opacity-100 scale-100 pointer-events-auto"
+                            : "opacity-0 scale-95 pointer-events-none"
+                            }`}
+                    >
+                        <Link
+                            to="/profile"
+                            className="block px-4 py-2 hover:bg-gray-100"
+                            onClick={() => setProfileOpen(false)}
+                        >
+                            Profile
+                        </Link>
+                        <Link
+                            to="/projects"
+                            className="block px-4 py-2 hover:bg-gray-100"
+                            onClick={() => setProfileOpen(false)}
+                        >
+                            Projects
+                        </Link>
+                        <button
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                        >
+                            Logout
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div className="flex items-center gap-4">
-                {/* Notification Icon */}
-                <button className="p-2 rounded relative">
-                    <Bell />
-                    <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-
-                {/* User Avatar */}
-                {/* <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-300">
-                    {
-                        isLoading ? <>
-                            <div>
-                                <Spinner />
-                            </div>
-                        </> : <><img
-                            src={data?.data?.avatar}
-                            alt="User"
-                            className="w-full h-full object-cover"
-                        /></>
-                    }
-                </div> */}
+            {/* Mobile Menu */}
+            <div
+                className={`md:hidden mt-3 bg-gray-50 rounded-lg overflow-hidden
+        transition-all duration-200 ease-out
+        ${menuOpen ? "max-h-40 opacity-100 p-3" : "max-h-0 opacity-0 p-0"}
+        `}
+            >
+                <div className="flex flex-col gap-2">
+                    <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+                    <Link to="/projects" onClick={() => setMenuOpen(false)}>Projects</Link>
+                </div>
             </div>
-        </div>
-    )
-}
+        </nav>
+    );
+};
 
-export default Navbar
+export default Navbar;

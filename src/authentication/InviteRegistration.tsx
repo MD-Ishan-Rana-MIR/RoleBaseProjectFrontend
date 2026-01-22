@@ -4,6 +4,10 @@ import type { SubmitHandler } from "react-hook-form";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import { errorMessage } from "../utility/errorMessage";
+import { useInviteRegistrationMutation } from "../api/admin/inviteApi";
+import toast from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 type RegisterFormValues = {
     name: string;
@@ -17,19 +21,30 @@ const InviteRegistration = () => {
     const searchParams = new URLSearchParams(location.search);
     const emailFromURL = searchParams.get("email") || ""; // Get email from query
     console.log("email is", emailFromURL)
-    const tokenFromURL = searchParams.get("token") || ""; // Get token from query
+    // const tokenFromURL = searchParams.get("token") || ""; // Get token from query
 
 
+    const [inviteRegistration] = useInviteRegistrationMutation();
 
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors, isSubmitting },
     } = useForm<RegisterFormValues>();
 
     const onSubmit: SubmitHandler<RegisterFormValues> = async (data) => {
-        console.log("Register Data:", data);
-        // TODO: call your API to register
+        try {
+            const res = await inviteRegistration(data).unwrap();
+
+            if (res) {
+                console.log(res);
+                toast.success(res?.message);
+                reset(); // ✅ form reset correctly
+            }
+        } catch (error) {
+            errorMessage(error);
+        }
     };
 
     return (
@@ -128,7 +143,7 @@ const InviteRegistration = () => {
                         disabled={isSubmitting}
                         className="cursor-pointer w-full bg-indigo-600 text-white py-2 rounded-lg font-medium hover:bg-indigo-700 transition disabled:opacity-60"
                     >
-                        {isSubmitting ? "Registering..." : "Register"}
+                        {isSubmitting ? <Spinner /> : "Register"}
                     </button>
                 </form>
 

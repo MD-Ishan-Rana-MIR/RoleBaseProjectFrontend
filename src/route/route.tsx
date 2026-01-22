@@ -5,10 +5,15 @@ import ProjectManage from "../pages/project/ProjectManage";
 import UserManagement from "../pages/user-management/UserManagement";
 import ProtectedRoute from "./ProtectedRoute";
 import InviteRegistration from "../authentication/InviteRegistration";
+import Navbar from "../components/Navbar";
 
 export const router = createBrowserRouter([
     {
         path: "/",
+        element: <Navbar />
+    },
+    {
+        path: "/login",
         element: <Login />
     },
     {

@@ -2,8 +2,8 @@ import { useState } from "react";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { FiMenu } from "react-icons/fi";
 import { MdDashboard } from "react-icons/md";
-import Navbar from "../components/Navbar";
 import { FaProjectDiagram, FaUser } from "react-icons/fa";
+import AdminNavbar from "../components/AdminNavbar";
 
 const MainLayout = () => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -150,7 +150,7 @@ const MainLayout = () => {
                         : "calc(100% - 100px)",
                 }}
             >
-                <Navbar />
+                <AdminNavbar />
             </header>
 
             {/* Main Content */}
