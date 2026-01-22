@@ -13,7 +13,6 @@ const AdminNavbar = () => {
 
     // const { data, isLoading } = useProfileQuery({});
     // const profile: UserResponseType = data;
-    // console.log(profile.data.avatar)
 
     return (
         <div className=' flex items-center justify-between  w-full py-3 ' >

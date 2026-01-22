@@ -8,7 +8,6 @@ type ProtectedRouteProps = {
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     const role = localStorage.getItem("role");
-    console.log("role is", role)
     if (role != "ADMIN") {
         // Not logged in → redirect to login page
         return <Navigate to="/" replace />;

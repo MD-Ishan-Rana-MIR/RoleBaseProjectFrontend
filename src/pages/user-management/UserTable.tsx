@@ -1,26 +1,9 @@
 // src/components/UserTable.tsx
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import InviteForm from "./InviteFrom";
-
-export type User = {
-    id: number;
-    name: string;
-    email: string;
-    role: "ADMIN" | "MANAGER" | "STAFF";
-    status: "ACTIVE" | "INACTIVE";
-    invitedAt: string;
-    createdAt: string;
-};
-
-const initialUsers: User[] = [
-    { id: 1, name: "Ishan Rana", email: "ishanrana363@gmail.com", role: "ADMIN", status: "ACTIVE", invitedAt: "2026-01-22", createdAt: "2026-01-21" },
-    { id: 2, name: "John Doe", email: "john@example.com", role: "MANAGER", status: "INACTIVE", invitedAt: "2026-01-20", createdAt: "2026-01-18" },
-    { id: 3, name: "Jane Smith", email: "jane@example.com", role: "STAFF", status: "ACTIVE", invitedAt: "2026-01-19", createdAt: "2026-01-19" },
-    { id: 4, name: "Alice", email: "alice@example.com", role: "STAFF", status: "ACTIVE", invitedAt: "2026-01-18", createdAt: "2026-01-18" },
-    { id: 5, name: "Bob", email: "bob@example.com", role: "MANAGER", status: "ACTIVE", invitedAt: "2026-01-17", createdAt: "2026-01-17" },
-    { id: 6, name: "Charlie", email: "charlie@example.com", role: "ADMIN", status: "INACTIVE", invitedAt: "2026-01-16", createdAt: "2026-01-16" },
-    { id: 7, name: "David", email: "david@example.com", role: "STAFF", status: "ACTIVE", invitedAt: "2026-01-15", createdAt: "2026-01-15" },
-];
+import type { UserType } from "../../utility/type/userType";
+import { useAllUserQuery } from "../../api/admin/inviteApi";
+import UserRoleStatusUpdate from "./UserRoleStatusUpdate";
 
 const roleColors = {
     ADMIN: "bg-red-100 text-red-800",
@@ -34,86 +17,76 @@ const statusColors = {
 };
 
 const UserTable = () => {
-
-
     const [search, setSearch] = useState("");
     const [filterRole, setFilterRole] = useState<"" | "ADMIN" | "MANAGER" | "STAFF">("");
     const [filterStatus, setFilterStatus] = useState<"" | "ACTIVE" | "INACTIVE">("");
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 10;
 
-    // Modal state
+    // Modals
     const [modalOpen, setModalOpen] = useState(false);
-    const [modalUser, setModalUser] = useState<User | null>(null);
+    const [modalUser, setModalUser] = useState<UserType | null>(null);
     const [modalType, setModalType] = useState<"role" | "status" | null>(null);
     const [newValue, setNewValue] = useState<string>("");
 
-    const filteredUsers = useMemo(() => {
-        return initialUsers
-            .filter((u) =>
-                u.name.toLowerCase().includes(search.toLowerCase()) ||
-                u.email.toLowerCase().includes(search.toLowerCase())
-            )
-            .filter((u) => (filterRole ? u.role === filterRole : true))
-            .filter((u) => (filterStatus ? u.status === filterStatus : true));
-    }, [initialUsers, search, filterRole, filterStatus]);
+    const [inviteModal, setInviteModal] = useState(false);
 
-    const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
-    const paginatedUsers = filteredUsers.slice(
-        (currentPage - 1) * rowsPerPage,
-        currentPage * rowsPerPage
-    );
+    // RTK Query
+    const { data, isLoading, refetch } = useAllUserQuery({
+        page: currentPage,
+        limit: rowsPerPage,
+        search,
+        role: filterRole,
+        status: filterStatus
+    });
 
-    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+    // modal open 
 
-    // Open modal
-    const openModal = (user: User, type: "role" | "status") => {
+    // const [modalType, setModalType] = useState<string>("");
+
+
+    const openModal = (user: UserType, type: "role" | "status") => {
         setModalUser(user);
         setModalType(type);
         setNewValue(type === "role" ? user.role : user.status);
         setModalOpen(true);
     };
 
-    // open user invite modal 
-
-    const [inviteModal, setInviteModal] = useState<boolean>(false);
-
-    const openInviteModal = () => {
-        setInviteModal(!inviteModal)
-    }
-
-    // clear button 
-
+    const openInviteModal = () => setInviteModal(true);
     const handleClear = () => {
+        setSearch("");
         setFilterRole("");
         setFilterStatus("");
-        setSearch("");
+        setCurrentPage(1);
+    };
 
-    }
-
-
-
-
+    const totalPages = data?.meta.totalPages || 1;
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
-        <div className=" bg-white rounded-lg shadow-lg px-4 py-6 ">
-            {/* invite button  */}
-            <div className=" flex justify-end mb-7 " >
-                <button onClick={openInviteModal} className="px-10 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold">Invite User</button>
-
+        <div className="bg-white rounded-lg shadow-lg px-4 py-6">
+            {/* Invite Button */}
+            <div className="flex justify-end mb-7">
+                <button
+                    onClick={openInviteModal}
+                    className="px-10 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold"
+                >
+                    Invite User
+                </button>
             </div>
+
             {/* Filters */}
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3 ">
-                <div className=" flex gap-x-6 w-full " >
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-3">
+                <div className="flex gap-x-6 w-full">
                     <input
                         type="text"
                         placeholder="Search by name or email..."
-                        className="border border-gray-300 px-3 py-2 w-full rounded-lg  md:w-1/3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="border border-gray-300 px-3 py-2 w-full rounded-lg md:w-1/3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                     />
                 </div>
-                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 ">
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <select
                         value={filterRole}
                         onChange={(e) => setFilterRole(e.target.value as any)}
@@ -124,6 +97,7 @@ const UserTable = () => {
                         <option value="MANAGER">MANAGER</option>
                         <option value="STAFF">STAFF</option>
                     </select>
+
                     <select
                         value={filterStatus}
                         onChange={(e) => setFilterStatus(e.target.value as any)}
@@ -133,16 +107,17 @@ const UserTable = () => {
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
                     </select>
-                    <button onClick={handleClear} className="px-10 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold">Clear</button>
 
+                    <button
+                        onClick={handleClear}
+                        className="px-10 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold"
+                    >
+                        Clear
+                    </button>
                 </div>
-
-
-
-
             </div>
 
-            {/* Responsive Table */}
+            {/* Table */}
             <div className="overflow-x-auto">
                 <table className="min-w-175 md:min-w-full border border-gray-200">
                     <thead className="bg-gray-100">
@@ -157,33 +132,45 @@ const UserTable = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {paginatedUsers.length > 0 ? (
-                            paginatedUsers.map((user) => (
-                                <tr key={user.id} className="border-b border-gray-200 hover:bg-gray-50">
+                        {isLoading ? (
+                            <tr>
+                                <td colSpan={7} className="text-center px-4 py-6 text-gray-500">
+                                    Loading...
+                                </td>
+                            </tr>
+                        ) : data?.data.length ? (
+                            data.data.map((user: UserType) => (
+                                <tr key={user._id} className="border-b border-gray-200 hover:bg-gray-50">
                                     <td className="px-2 sm:px-4 py-2">{user.name}</td>
                                     <td className="px-2 sm:px-4 py-2">{user.email}</td>
                                     <td className="px-2 sm:px-4 py-2">
-                                        <span className={`px-2 py-1 rounded-full text-sm font-medium ${roleColors[user.role]}`}>
+                                        <span
+                                            className={`px-2 py-1 rounded-full text-sm font-medium ${roleColors[user.role]}`}
+                                        >
                                             {user.role}
                                         </span>
                                     </td>
                                     <td className="px-2 sm:px-4 py-2">
-                                        <span className={`px-2 py-1 rounded-full text-sm font-medium ${statusColors[user.status]}`}>
+                                        <span
+                                            className={`px-2 py-1 rounded-full text-sm font-medium ${statusColors[user.status]}`}
+                                        >
                                             {user.status}
                                         </span>
                                     </td>
-                                    <td className="px-2 sm:px-4 py-2">{user.invitedAt}</td>
-                                    <td className="px-2 sm:px-4 py-2">{user.createdAt}</td>
+                                    <td className="px-2 sm:px-4 py-2">
+                                        {new Date(user.invitedAt).toLocaleDateString()}
+                                    </td>
+                                    <td className="px-2 sm:px-4 py-2">{new Date(user.createdAt).toLocaleDateString()}</td>
                                     <td className="px-2 sm:px-4 py-2 flex flex-col sm:flex-row gap-2">
                                         <button
                                             onClick={() => openModal(user, "role")}
-                                            className="px-2 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold"
+                                            className="px-2 cursor-pointer sm:px-3 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-700 text-sm"
                                         >
                                             Update Role
                                         </button>
                                         <button
                                             onClick={() => openModal(user, "status")}
-                                            className="px-2 sm:px-3 py-2 cursor-pointer rounded-md bg-indigo-500 text-white hover:bg-indigo-700 text-sm font-semibold"
+                                            className="px-2 cursor-pointer sm:px-3 py-2 rounded bg-indigo-500 text-white hover:bg-indigo-700 text-sm"
                                         >
                                             Update Status
                                         </button>
@@ -206,7 +193,7 @@ const UserTable = () => {
                 <button
                     onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
                     disabled={currentPage === 1}
-                    className="px-3 py-1 border rounded-lg disabled:opacity-50 cursor-pointer "
+                    className="px-3 py-1 border rounded-lg disabled:opacity-50 cursor-pointer"
                 >
                     Prev
                 </button>
@@ -215,7 +202,10 @@ const UserTable = () => {
                     <button
                         key={num}
                         onClick={() => setCurrentPage(num)}
-                        className={`px-3 py-1 border rounded-lg ${currentPage === num ? "bg-indigo-500 text-white" : "bg-white text-gray-700 hover:bg-gray-100"}`}
+                        className={`px-3 py-1 border rounded-lg ${currentPage === num
+                            ? "bg-indigo-500 text-white"
+                            : "bg-white text-gray-700 hover:bg-gray-100"
+                            }`}
                     >
                         {num}
                     </button>
@@ -224,79 +214,30 @@ const UserTable = () => {
                 <button
                     onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
                     disabled={currentPage === totalPages}
-                    className="px-3 py-1 border rounded-lg disabled:opacity-50 cursor-pointer "
+                    className="px-3 py-1 border rounded-lg disabled:opacity-50 cursor-pointer"
                 >
                     Next
                 </button>
             </div>
 
-            {/* Modal */}
+            {/* Update Modal */}
             {modalOpen && modalUser && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-600/45 z-50 p-2">
-                    <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 w-full max-w-sm relative">
-                        {/* Close button */}
-                        <button
-                            onClick={() => setModalOpen(false)}
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-3xl font-bold cursor-pointer"
-                        >
-                            &times;
-                        </button>
-
-                        <h3 className="text-lg font-semibold mb-4">
-                            Update {modalType === "role" ? "Role" : "Status"} for {modalUser.name}
-                        </h3>
-
-                        <select
-                            value={newValue}
-                            onChange={(e) => setNewValue(e.target.value)}
-                            className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        >
-                            {modalType === "role" ? (
-                                <>
-                                    <option value="ADMIN">ADMIN</option>
-                                    <option value="MANAGER">MANAGER</option>
-                                    <option value="STAFF">STAFF</option>
-                                </>
-                            ) : (
-                                <>
-                                    <option value="ACTIVE">ACTIVE</option>
-                                    <option value="INACTIVE">INACTIVE</option>
-                                </>
-                            )}
-                        </select>
-
-                        <div className="flex justify-end gap-2 flex-wrap">
-                            <button
-                                onClick={() => setModalOpen(false)}
-                                className="px-4 py-2 cursor-pointer rounded border hover:bg-gray-100"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                className="px-4 py-2 cursor-pointer rounded bg-indigo-500 text-white hover:bg-indigo-700"
-                            >
-                                Save
-                            </button>
-                        </div>
-                    </div>
+                    <UserRoleStatusUpdate setModalOpen={setModalOpen} modalType={modalType} newValue={newValue} modalUser={modalUser} setNewValue={setNewValue} />
                 </div>
             )}
 
 
-            {/* invite modal  */}
 
 
-            {/* Modal */}
+
+
+            {/* Invite Modal */}
             {inviteModal && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-600/45 z-50 p-2">
                     <InviteForm setInviteModal={setInviteModal} />
                 </div>
             )}
-
-
-
-
-
         </div>
     );
 };

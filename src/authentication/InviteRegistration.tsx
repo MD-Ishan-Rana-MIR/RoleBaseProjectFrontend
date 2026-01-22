@@ -20,7 +20,6 @@ const InviteRegistration = () => {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const emailFromURL = searchParams.get("email") || ""; // Get email from query
-    console.log("email is", emailFromURL)
     // const tokenFromURL = searchParams.get("token") || ""; // Get token from query
 
 
@@ -38,7 +37,6 @@ const InviteRegistration = () => {
             const res = await inviteRegistration(data).unwrap();
 
             if (res) {
-                console.log(res);
                 toast.success(res?.message);
                 reset(); // ✅ form reset correctly
             }

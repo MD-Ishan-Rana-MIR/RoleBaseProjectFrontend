@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-console.log("base url is", import.meta.env.VITE_BASE_URL)
 
 export const baseApi = createApi({
     reducerPath: "api",
@@ -19,8 +18,7 @@ export const baseApi = createApi({
         },
     }),
     tagTypes: [
-        "Auth",
-        "Invite"
+        "User",
     ],
     endpoints: () => ({}),
 });
