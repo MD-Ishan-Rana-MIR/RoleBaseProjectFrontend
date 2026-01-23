@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa";
+import { logoutAlert } from "../utility/alert/logoutAlert";
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,9 +28,12 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
+  const handleLogout =async () => {
+    const res = await logoutAlert();
+    if(res.isConfirmed){
+      localStorage.removeItem("token");
+    navigate("/");
+    }
   };
 
   return (
@@ -44,9 +48,7 @@ const Navbar = () => {
         {/* Middle: Desktop Menu */}
         <div className="hidden md:flex gap-6 text-gray-700 font-medium">
           <Link to="/" className="hover:text-indigo-600">Home</Link>
-          {token && (
-            <Link to="/projects" className="hover:text-indigo-600">Projects</Link>
-          )}
+          
           {token && (
             <Link to="/project-create" className="hover:text-indigo-600">Project Create</Link>
           )}
@@ -100,16 +102,10 @@ const Navbar = () => {
               >
                 Project Create
               </Link>
-              <Link
-                to="/projects"
-                className="block px-4 py-2 hover:bg-gray-100"
-                onClick={() => setProfileOpen(false)}
-              >
-                Projects
-              </Link>
+              
               <button
                 onClick={handleLogout}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500"
+                className="w-full cursor-pointer text-left px-4 py-2 hover:bg-gray-100 text-red-500"
               >
                 Logout
               </button>
@@ -133,7 +129,6 @@ const Navbar = () => {
       >
         <div className="flex flex-col gap-2">
           <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-          {token && <Link to="/projects" onClick={() => setMenuOpen(false)}>Projects</Link>}
           {token && <Link to="/project-create" onClick={() => setMenuOpen(false)}>Project Create</Link>}
         </div>
       </div>

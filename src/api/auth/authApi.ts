@@ -10,7 +10,15 @@ export const authApi = baseApi.injectEndpoints({
                 method: "POST",
                 body: data
             })
+        }),
+
+        userProfile : builder.query({
+            query : ()=>({
+                url : "/user-profile",
+                method :"GET"   
+            })
         })
+
 
 
 
@@ -18,4 +26,4 @@ export const authApi = baseApi.injectEndpoints({
     }),
 })
 
-export const { useLoginMutation } = authApi
+export const { useLoginMutation,useUserProfileQuery } = authApi

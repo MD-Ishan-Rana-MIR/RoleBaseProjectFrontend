@@ -9,6 +9,7 @@ import AdminProtectRoute from "./AdminProtectRoute";
 import ProjectCreate from "../pages/user/project/ProjectCreate";
 import WebLayout from "../main-layout/WebLayout";
 import AllProject from "../pages/user/project/AllProject";
+import UserProfile from "../pages/user/profile/UserProfile";
 
 export const router = createBrowserRouter([
     
@@ -20,10 +21,14 @@ export const router = createBrowserRouter([
                 path : "/",
                 element : <AllProject/>
             },
-        {
-        path : "project-create",
-        element : <ProtectedRoute><ProjectCreate/></ProtectedRoute>
-    },
+            {
+                path : "project-create",
+                element : <ProtectedRoute><ProjectCreate/></ProtectedRoute>
+            },
+            {
+                path : "profile",
+                element : <UserProfile></UserProfile>
+            }
         ]
     },
     {
