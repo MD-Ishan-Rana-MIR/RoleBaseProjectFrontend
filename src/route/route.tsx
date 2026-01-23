@@ -18,6 +18,10 @@ export const router = createBrowserRouter([
         element: <WebLayout />,
         children : [
             {
+        path: "/login",
+        element: <Login />,
+    },
+            {
                 path : "/",
                 element : <AllProject/>
             },
@@ -31,10 +35,7 @@ export const router = createBrowserRouter([
             }
         ]
     },
-    {
-        path: "/login",
-        element: <Login />,
-    },
+    
     {
         path: "/registraiton/accept-invite",
         element: <InviteRegistration />
