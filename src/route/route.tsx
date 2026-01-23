@@ -44,12 +44,12 @@ export const router = createBrowserRouter([
         path: "/dashboard",
         element: <MainLayout />,
         children: [
+            // {
+            //     path: "",
+            //     element: <AdminProtectRoute><div><h1>dashboard home page</h1></div></AdminProtectRoute>
+            // },
             {
                 path: "",
-                element: <AdminProtectRoute><div><h1>dashboard home page</h1></div></AdminProtectRoute>
-            },
-            {
-                path: "user-management",
                 element: <AdminProtectRoute><UserManagement /></AdminProtectRoute>
             },
             {

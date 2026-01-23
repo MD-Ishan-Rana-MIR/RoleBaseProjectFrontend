@@ -121,7 +121,7 @@ RoleBaseProjectFrontend/
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/MD-Ishan-Rana-MIR/RoleBaseProjectFrontend
    cd RoleBaseProjectFrontend
    ```
 
@@ -147,7 +147,7 @@ RoleBaseProjectFrontend/
    npm run dev
    ```
    
-   The application will be available at `http://localhost:5173` (or another port if 5173 is in use).
+   The application will be available at `https://role-base-project-frontend.vercel.app/` (or another port if 5173 is in use).
 
 ## 🔧 Environment Variables
 
@@ -155,7 +155,7 @@ This project requires the following environment variables:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `VITE_BASE_URL` | Backend API base URL | `http://localhost:5500/api/v1` |
+| `VITE_BASE_URL` | Backend API base URL | `https://admin-project-management-system-bac.vercel.app/api/v1` |
 
 > **Note**: All Vite environment variables must be prefixed with `VITE_` to be exposed to the client-side code.
 
@@ -191,16 +191,16 @@ npm run lint
 _Screenshots will be added here to showcase the application interface._
 
 ### Login Page
-_Coming soon_
+![alt text](image.png)
 
 ### Admin Dashboard
-_Coming soon_
+![alt text](image-1.png)
 
 ### User Project Management
-_Coming soon_
+![alt text](image-2.png)
 
 ### User Profile
-_Coming soon_
+![alt text](image-3.png)
 
 ## 🏗️ Architecture Highlights
 

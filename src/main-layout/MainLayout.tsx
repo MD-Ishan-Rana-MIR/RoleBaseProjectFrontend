@@ -31,11 +31,7 @@ const MainLayout = () => {
                 {/* Logo + Toggle */}
                 <div className="flex items-center justify-between mt-6 mb-10">
                     {sidebarOpen && (
-                        <img
-                            src="/images/logo/logo.svg"
-                            alt="Logo"
-                            className="h-9"
-                        />
+                        <h1 className=" text-6xl " >LoGo</h1>
                     )}
 
                     <button
@@ -49,6 +45,7 @@ const MainLayout = () => {
                 {/* Menu */}
                 <nav>
                     <ul className="space-y-3 text-lg font-medium">
+                        
                         <li>
                             <NavLink
                                 to="/dashboard"
@@ -57,7 +54,7 @@ const MainLayout = () => {
                                     : "hover:bg-gray-100"
                                     }`}
                             >
-                                <MdDashboard
+                                <FaUser
                                     size={25}
                                     className={
                                         pathname === "/dashboard"
@@ -69,35 +66,6 @@ const MainLayout = () => {
                                 {sidebarOpen && (
                                     <span
                                         className={`text-base ${pathname === "/dashboard"
-                                            ? "text-indigo-600"
-                                            : "text-[#989898]"
-                                            }`}
-                                    >
-                                        Dashboard
-                                    </span>
-                                )}
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink
-                                to="/dashboard/user-management"
-                                className={`flex items-center gap-5 px-5 py-3 rounded-full transition    ${pathname === "/dashboard/user-management"
-                                    ? "bg-[#E9E9E9]"
-                                    : "hover:bg-gray-100"
-                                    }`}
-                            >
-                                <FaUser
-                                    size={25}
-                                    className={
-                                        pathname === "/dashboard/user-management"
-                                            ? "text-indigo-600"
-                                            : "text-[#989898]"
-                                    }
-                                />
-
-                                {sidebarOpen && (
-                                    <span
-                                        className={`text-base ${pathname === "/dashboard/user-management"
                                             ? "text-indigo-600"
                                             : "text-[#989898]"
                                             }`}
