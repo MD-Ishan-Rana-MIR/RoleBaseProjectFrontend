@@ -193,6 +193,9 @@ _Screenshots will be added here to showcase the application interface._
 ### Login Page
 ![alt text](image.png)
 
+### Home Page
+![alt text](image-4.png)
+
 ### Admin Dashboard
 ![alt text](image-1.png)
 
