@@ -26,13 +26,13 @@ const UserTable = () => {
     // Modals
     const [modalOpen, setModalOpen] = useState(false);
     const [modalUser, setModalUser] = useState<UserType | null>(null);
-    const [modalType, setModalType] = useState<"role" | "status" | null>(null);
+const [modalType, setModalType] = useState<"status" | "role" | null>();
     const [newValue, setNewValue] = useState<string>("");
 
     const [inviteModal, setInviteModal] = useState(false);
 
     // RTK Query
-    const { data, isLoading, refetch } = useAllUserQuery({
+    const { data, isLoading,  } = useAllUserQuery({
         page: currentPage,
         limit: rowsPerPage,
         search,
@@ -221,9 +221,15 @@ const UserTable = () => {
             </div>
 
             {/* Update Modal */}
-            {modalOpen && modalUser && (
+           {modalOpen && modalUser && modalType && (
                 <div className="fixed inset-0 flex items-center justify-center bg-gray-600/45 z-50 p-2">
-                    <UserRoleStatusUpdate setModalOpen={setModalOpen} modalType={modalType} newValue={newValue} modalUser={modalUser} setNewValue={setNewValue} />
+                    <UserRoleStatusUpdate
+                    setModalOpen={setModalOpen}
+                    modalType={modalType}
+                    newValue={newValue}
+                    modalUser={modalUser}
+                    setNewValue={setNewValue}
+                    />
                 </div>
             )}
 

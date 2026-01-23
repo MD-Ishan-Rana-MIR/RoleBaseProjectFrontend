@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 interface Props {
     setModalOpen: (open: boolean) => void;
-    modalType: "role" | "status";
+  modalType: "status" | "role" | null;
     newValue: string;
     setNewValue: (val: string) => void;
     modalUser: {

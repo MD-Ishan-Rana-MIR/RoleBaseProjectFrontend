@@ -1,3 +1,4 @@
+import type { Project } from "../../utility/type/projectType";
 import { baseApi } from "../base-api/baseApi"
 interface ProjectsResponse {
   data: Project[];

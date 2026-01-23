@@ -1,73 +1,254 @@
-# React + TypeScript + Vite
+# Role-Based Project Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, full-featured project management application with role-based access control built using React, TypeScript, and Vite. This system enables organizations to manage projects efficiently with distinct user roles (Admin and User) and comprehensive project tracking capabilities.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Authentication & Authorization
+- **Secure Login System** - JWT-based authentication with token management
+- **Invite-Based Registration** - Users can only register through admin invitations
+- **Role-Based Access Control** - Two distinct roles with different permissions:
+  - **Admin**: Full system access including user and project management
+  - **User**: Access to personal projects and profile management
 
-## React Compiler
+### Admin Dashboard
+- **User Management** - Invite users, manage roles, and update user status
+- **Project Management** - Oversee all projects across the organization
+- **User Table** - View and manage all registered users with filtering and sorting
+- **Project Table** - Comprehensive project overview with management capabilities
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### User Features
+- **Project Creation** - Create and manage personal projects
+- **Project Viewing** - Browse all available projects
+- **Profile Management** - Update personal information and preferences
+- **Protected Routes** - Secure access to authorized features only
 
-## Expanding the ESLint configuration
+### UI/UX
+- **Responsive Design** - Fully responsive interface built with TailwindCSS
+- **Modern Components** - Clean, professional UI with loading states and skeletons
+- **Toast Notifications** - Real-time feedback using React Hot Toast
+- **Sweet Alerts** - Beautiful confirmation dialogs with SweetAlert2
+- **Icon Library** - Rich icon set from Lucide React and React Icons
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tech Stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Core Framework
+- **React 19** - Latest React with improved performance and features
+- **TypeScript** - Type-safe development experience
+- **Vite 7** - Lightning-fast build tool and dev server
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### State Management
+- **Redux Toolkit** - Simplified Redux with modern best practices
+- **RTK Query** - Powerful data fetching and caching solution
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Routing
+- **React Router v7** - Client-side routing with protected routes
+
+### Styling
+- **TailwindCSS v4** - Utility-first CSS framework
+- **@tailwindcss/vite** - Official Vite plugin for Tailwind
+
+### UI Components & Libraries
+- **React Hook Form** - Performant form validation and handling
+- **React Hot Toast** - Lightweight toast notifications
+- **SweetAlert2** - Beautiful, responsive popup boxes
+- **Lucide React** - Modern icon library
+- **React Icons** - Popular icon sets
+- **React Loader Spinner** - Loading indicators
+
+### Development Tools
+- **ESLint** - Code linting and quality enforcement
+- **TypeScript ESLint** - TypeScript-specific linting rules
+- **Vite Plugin React** - Fast Refresh and optimizations
+
+## 📁 Project Structure
+
+```
+RoleBaseProjectFrontend/
+├── public/                 # Static assets
+├── src/
+│   ├── api/               # API integration layer
+│   │   ├── admin/         # Admin-specific API calls
+│   │   ├── auth/          # Authentication APIs
+│   │   ├── base-api/      # RTK Query base configuration
+│   │   └── project/       # Project-related APIs
+│   ├── assets/            # Images, fonts, and other assets
+│   ├── authentication/    # Login and registration pages
+│   ├── components/        # Reusable UI components
+│   │   ├── AdminNavbar.tsx
+│   │   ├── Navbar.tsx
+│   │   ├── ProfileSkeleton.tsx
+│   │   ├── ProjectCard.tsx
+│   │   ├── ProjectSkeleton.tsx
+│   │   └── Spinner.tsx
+│   ├── main-layout/       # Layout components
+│   ├── pages/             # Page components
+│   │   ├── project/       # Admin project management
+│   │   ├── user/          # User-specific pages
+│   │   │   ├── profile/   # User profile
+│   │   │   └── project/   # User project pages
+│   │   └── user-management/ # Admin user management
+│   ├── route/             # Routing configuration
+│   │   ├── AdminProtectRoute.tsx
+│   │   ├── ProtectedRoute.tsx
+│   │   └── route.tsx
+│   ├── store/             # Redux store configuration
+│   ├── utility/           # Helper functions and types
+│   ├── App.tsx            # Root component
+│   ├── main.tsx           # Application entry point
+│   └── index.css          # Global styles
+├── .env                   # Environment variables (not in git)
+├── .env.example           # Environment variables template
+├── .gitignore             # Git ignore rules
+├── eslint.config.js       # ESLint configuration
+├── index.html             # HTML entry point
+├── package.json           # Dependencies and scripts
+├── tsconfig.json          # TypeScript configuration
+├── tsconfig.app.json      # App-specific TypeScript config
+├── tsconfig.node.json     # Node-specific TypeScript config
+├── vite.config.ts         # Vite configuration
+└── vercel.json            # Vercel deployment config
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🚦 Getting Started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **Node.js** (v18 or higher recommended)
+- **npm** or **yarn** package manager
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd RoleBaseProjectFrontend
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   
+   Create a `.env` file in the root directory by copying the example:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Then update the `.env` file with your actual values:
+   ```env
+   VITE_BASE_URL=http://localhost:5500/api/v1
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+   
+   The application will be available at `http://localhost:5173` (or another port if 5173 is in use).
+
+## 🔧 Environment Variables
+
+This project requires the following environment variables:
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `VITE_BASE_URL` | Backend API base URL | `http://localhost:5500/api/v1` |
+
+> **Note**: All Vite environment variables must be prefixed with `VITE_` to be exposed to the client-side code.
+
+See [`.env.example`](.env.example) for a complete template.
+
+## 📜 Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with hot reload |
+| `npm run build` | Build for production (TypeScript compilation + Vite build) |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint to check code quality |
+
+### Development Workflow
+
+```bash
+# Start development
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Check code quality
+npm run lint
 ```
+
+## 🎨 Screenshots
+
+_Screenshots will be added here to showcase the application interface._
+
+### Login Page
+_Coming soon_
+
+### Admin Dashboard
+_Coming soon_
+
+### User Project Management
+_Coming soon_
+
+### User Profile
+_Coming soon_
+
+## 🏗️ Architecture Highlights
+
+### API Layer
+- **RTK Query** for efficient data fetching and caching
+- Automatic request deduplication
+- Optimistic updates for better UX
+- Tag-based cache invalidation
+
+### Authentication Flow
+- JWT tokens stored in localStorage
+- Automatic token injection in API requests
+- Protected routes with role-based guards
+- Invite-based registration system
+
+### Routing Strategy
+- Public routes: Login, Invite Registration
+- User-protected routes: Project creation, Profile
+- Admin-protected routes: User Management, Project Management
+- Nested layouts for dashboard and web views
+
+## 🤝 Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 👨‍💻 Author
+
+**Your Name**
+- GitHub: [@yourusername](https://github.com/yourusername)
+- Email: your.email@example.com
+
+## 🙏 Acknowledgments
+
+- Built with [Vite](https://vitejs.dev/)
+- UI powered by [TailwindCSS](https://tailwindcss.com/)
+- State management by [Redux Toolkit](https://redux-toolkit.js.org/)
+- Icons from [Lucide](https://lucide.dev/) and [React Icons](https://react-icons.github.io/react-icons/)
+
+---
+
+**Note**: This is a frontend application that requires a backend API to function. Ensure your backend server is running and the `VITE_BASE_URL` environment variable is correctly configured.

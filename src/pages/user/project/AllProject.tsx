@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useGetProjectsQuery } from "../../../api/project/projectApi";
 import ProjectCard from "../../../components/ProjectCard";
 import ProjectCardSkeleton from "../../../components/ProjectSkeleton";
+import type { Project } from "../../../utility/type/projectType";
 
 const AllProject: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -74,7 +75,7 @@ const AllProject: React.FC = () => {
         <p>No projects found</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data?.data.map((project) => (
+          {data?.data.map((project:Project) => (
             <ProjectCard
               key={project._id}
               name={project.name}
